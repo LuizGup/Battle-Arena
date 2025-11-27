@@ -1,0 +1,39 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: api-gateway
+  cloud:
+    gateway:
+      # Configuração global de CORS (Para o Front-end não ser bloqueado)
+      globalcors:
+        cors-configurations:
+          '[/**]':
+            allowedOrigins: "*"
+            allowedMethods:
+              - GET
+              - POST
+              - PUT
+              - DELETE
+            allowedHeaders: "*"
+      
+      # As Rotas para os Microserviços
+      routes:
+        # Rota para o Auth Service
+        - id: auth-service
+          uri: http://localhost:8081
+          predicates:
+            - Path=/auth/**
+
+        # Rota para o Character Service
+        - id: character-service
+          uri: http://localhost:8082
+          predicates:
+            - Path=/characters/**
+
+        # Rota para o Combat Service
+        - id: combat-service
+          uri: http://localhost:8083
+          predicates:
+            - Path=/battles/**
